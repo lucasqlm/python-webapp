@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=${NAME}
+Exec=${PROJECT_PATH}/webapp.py ${ID}.webapp ${NAME} ${URL}
+Type=Application
+Icon=${PROJECT_PATH}/${ID}/icon.svg
+Terminal=false
+Comment=Loads ${NAME} in a Webview

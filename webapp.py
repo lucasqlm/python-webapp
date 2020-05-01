@@ -1,0 +1,94 @@
+#!/usr/bin/env python3
+import sys
+import gi
+import webbrowser
+import os
+
+gi.require_version("Gtk", "3.0")
+gi.require_version('WebKit2', '4.0')
+from gi.repository import Gio, Gtk, Gdk, GLib, WebKit2
+
+# https://github.com/hardpixel/devdocs-desktop/blob/master/devdocs_desktop.py
+class App(Gtk.Application):
+    def __init__(self, settings):
+        Gtk.Application.__init__(self,
+                                 application_id=settings['id'],
+                                 flags=Gio.ApplicationFlags.FLAGS_NONE)
+        GLib.set_application_name(settings['name'])
+        self.settings = settings
+
+    def do_activate(self):
+        self.window = Gtk.ApplicationWindow(application=self, title=self.settings['name'])
+        self.window.connect('key-press-event', self.on_keypress)
+        self.window.connect("window-state-event", self.on_window_state_event)
+        self.window.set_default_size(800, 600)
+
+        self.web_settings = WebKit2.Settings()
+        self.web_settings.set_enable_offline_web_application_cache(True)
+        self.web_settings.set_javascript_can_open_windows_automatically(True)
+        self.web_settings.set_allow_modal_dialogs(True)
+        self.web_settings.set_enable_javascript(True)
+        self.web_settings.set_enable_write_console_messages_to_stdout(True)
+
+        self.enable_persistent_cookies()
+
+        self.webview = WebKit2.WebView()
+        self.webview.set_settings(self.web_settings)
+        self.webview.connect('create', self.on_create)
+        self.webview.load_uri(settings['link'])
+
+        self.window.add(self.webview)
+        self.window.show_all()
+
+    def on_close(self, webview):
+        webview.get_parent_window().destroy()
+
+    def on_create(self, webview, action):
+        new_webview = WebKit2.WebView.new_with_related_view(webview)
+        new_webview.connect('close', self.on_close)
+        new_webview.load_uri(action.get_request().get_uri())
+        
+        new_window = Gtk.ApplicationWindow(application=self, title=self.settings['name'])
+        new_window.set_default_size(700, 800)
+        new_window.add(new_webview)
+        new_window.show_all()
+        return new_webview
+
+    def enable_persistent_cookies(self):
+        filepath = '.webapp'
+        if not os.path.exists(filepath):
+            os.makedirs(filepath)
+        cookies_file = os.path.join(filepath, 'cookies')
+        storage  = WebKit2.CookiePersistentStorage.TEXT
+        policy   = WebKit2.CookieAcceptPolicy.ALWAYS
+        
+        self.cookies = WebKit2.WebContext.get_default().get_cookie_manager()
+        self.cookies.set_accept_policy(policy)
+        self.cookies.set_persistent_storage(cookies_file, storage)
+
+    def on_keypress(self, widget, event):
+        if event.state & Gdk.ModifierType.CONTROL_MASK:
+            if event.keyval == Gdk.KEY_minus:
+                self.webview.set_zoom_level(self.webview.get_zoom_level() - 0.1)
+            elif event.keyval == Gdk.KEY_plus:
+                self.webview.set_zoom_level(self.webview.get_zoom_level() + 0.1)
+            elif event.keyval == Gdk.KEY_0:
+                self.webview.set_zoom_level(1.0)
+            elif event.keyval == Gdk.KEY_r:
+                self.webview.reload()
+            elif event.keyval == Gdk.KEY_F:
+                self.fullscreen_mode()
+
+    def on_window_state_event(self, widget, ev):
+        self.__is_fullscreen = bool(ev.new_window_state & Gdk.WindowState.FULLSCREEN)
+
+    def fullscreen_mode(self):
+        if self.__is_fullscreen:
+            self.window.unfullscreen()
+        else:
+            self.window.fullscreen()
+
+if __name__ == '__main__':
+    settings = dict(id=str(sys.argv[1]), name=str(sys.argv[2]), link=str(sys.argv[3]))
+    app = App(settings)
+    app.run()
