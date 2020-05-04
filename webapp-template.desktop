@@ -1,6 +1,6 @@
 [Desktop Entry]
 Name=${NAME}
-Exec=${PROJECT_PATH}/webapp.py ${ID}.webapp ${NAME} ${URL}
+Exec=${PROJECT_PATH}/webapp ${ID}.webapp ${NAME} ${URL}
 Type=Application
 Icon=${PROJECT_PATH}/${ID}/icon.svg
 Terminal=false

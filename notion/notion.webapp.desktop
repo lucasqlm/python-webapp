@@ -1,7 +1,7 @@
 [Desktop Entry]
 Name=Notion
-Exec=/home/flynn/Projects/webapp/webapp.py notion.webapp Notion https://www.notion.so
+Exec=/home/flynn/Projects/python-webapp/webapp notion.webapp Notion https://www.notion.so
 Type=Application
-Icon=/home/flynn/Projects/webapp/notion/icon.svg
+Icon=/home/flynn/Projects/python-webapp/notion/icon.svg
 Terminal=false
 Comment=Loads Notion in a Webview

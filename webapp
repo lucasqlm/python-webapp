@@ -55,7 +55,10 @@ class App(Gtk.Application):
         return new_webview
 
     def enable_persistent_cookies(self):
-        filepath = '.webapp'
+        default_xdg_home = os.path.join(os.environ['HOME'],'.cache')
+        xdg_home = os.getenv('XDG_CACHE_HOME', default_xdg_home)
+        filepath = os.path.join(xdg_home,'webapp')
+        #filepath = '.webapp'
         if not os.path.exists(filepath):
             os.makedirs(filepath)
         cookies_file = os.path.join(filepath, 'cookies')
