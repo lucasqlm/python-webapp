@@ -81,6 +81,12 @@ class App(Gtk.Application):
                 self.webview.reload()
             elif event.keyval == Gdk.KEY_F:
                 self.fullscreen_mode()
+        # If Alt key is pressed
+        elif event.state & Gdk.ModifierType.MOD1_MASK:
+            if event.keyval == Gdk.KEY_Left:
+                self.webview.go_back()
+            elif event.keyval == Gdk.KEY_Right:
+                self.webview.go_forward()
 
     def on_window_state_event(self, widget, ev):
         self.__is_fullscreen = bool(ev.new_window_state & Gdk.WindowState.FULLSCREEN)
