@@ -11,6 +11,16 @@ case  $1  in
         export NAME=Whatsapp
         export URL=https://web.whatsapp.com
         ;;            
+    slack)
+        export ID=slack
+        export NAME=Slack
+        export URL=https://inlocoglobal.slack.com
+        ;;            
+    google-calendar)
+        export ID=calendar.google
+        export NAME=Calendar
+        export URL=https://calendar.google.com
+        ;;            
     *)
         echo "Choose a webapp"
         exit 1;

@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Calendar
+Exec=env GTK_THEME=Adwaita:light /home/flynn/Projects/python-webapp/webapp calendar.google.webapp Calendar https://calendar.google.com
+Type=Application
+Icon=/home/flynn/Projects/python-webapp/calendar.google/icon.svg
+Terminal=false
+Comment=Loads Calendar in a Webview

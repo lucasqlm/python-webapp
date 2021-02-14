@@ -1,7 +1,7 @@
 [Desktop Entry]
 Name=Whatsapp
-Exec=/home/flynn/Projects/webapp/webapp.py whatsapp.webapp Whatsapp https://web.whatsapp.com
+Exec=/home/flynn/Projects/python-webapp/webapp whatsapp.webapp Whatsapp https://web.whatsapp.com
 Type=Application
-Icon=/home/flynn/Projects/webapp/whatsapp/icon.svg
+Icon=/home/flynn/Projects/python-webapp/whatsapp/icon.svg
 Terminal=false
 Comment=Loads Whatsapp in a Webview
